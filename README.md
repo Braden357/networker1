@@ -15,4 +15,4 @@ cp .env.example .env.local
 npm run dev
 ```
 
-See [`web/SUPABASE_SETUP.md`](web/SUPABASE_SETUP.md) and [`web/README.md`](web/README.md) for Supabase, migrations, and Vercel.
+See [`web/SUPABASE_SETUP.md`](web/SUPABASE_SETUP.md) and [`web/README.md`](web/README.md) for Supabase, migrations, and Vercel. Vercel project ID: `prj_Uy6TxtvfTGG1MlJ5DTgEqQ1oon1F` (details in [`web/README.md`](web/README.md)).

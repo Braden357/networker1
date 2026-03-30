@@ -46,6 +46,9 @@ Next.js app for [Phase 1](../DEVELOPMENT_PLAN.md): authentication, Supabase-back
 
 ## Deploy to Vercel
 
+**Project ID** (dashboard / support / CLI): `prj_Uy6TxtvfTGG1MlJ5DTgEqQ1oon1F`  
+Stored in [`.vercel/project.json`](.vercel/project.json) for `vercel` CLI. If the CLI asks for a **Team / Org ID**, run `vercel link` from `web/` once or copy it from Vercel → Team Settings. **Production URL and 404s are controlled in the Vercel dashboard** (Deployments, domain, root directory)—the project ID alone does not change routing.
+
 1. Push this repo to GitHub (this folder can live as the repo root or as a monorepo subfolder).
 2. [Import the project](https://vercel.com/new) in Vercel.
 3. If the Next app lives in `web/`, set **Root Directory** to `web` in Vercel project settings.

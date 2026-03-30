@@ -34,8 +34,9 @@ yarn-error.log*
 .env*
 !.env.example
 
-# vercel
-.vercel
+# vercel — ignore local CLI cache except checked-in project id
+.vercel/*
+!.vercel/project.json
 
 # typescript
 *.tsbuildinfo
