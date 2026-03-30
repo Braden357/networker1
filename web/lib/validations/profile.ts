@@ -11,7 +11,7 @@ export const profileFormSchema = z
       .number({ error: "Enter a graduation year" })
       .int()
       .min(1950, "Year seems too early")
-      .max(2035, "Year seems too far in the future"),
+      .max(2040, "Year seems too far in the future"),
     major: z
       .string()
       .trim()

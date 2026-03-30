@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { ProfileForm, type ProfileRow } from "./profile-form";
+import { ProfileSummary } from "./profile-summary";
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -45,7 +46,8 @@ export default async function DashboardPage() {
           Student profile
         </h2>
         <p className="mt-2 text-sm text-zinc-600">
-          Used for alumni matching and professional outreach drafts (Phase 2).
+          Used for alumni matching and outreach drafts. US-focused for this MVP;
+          you can edit anything below anytime.
         </p>
 
         {profileError ? (
@@ -56,7 +58,10 @@ export default async function DashboardPage() {
             ).
           </p>
         ) : (
-          <ProfileForm profile={profileRow} />
+          <>
+            <ProfileSummary profile={profileRow} />
+            <ProfileForm profile={profileRow} />
+          </>
         )}
 
         {!profileError && profile?.created_at ? (

@@ -74,7 +74,7 @@ export function ProfileForm({ profile }: { profile: ProfileRow | null }) {
           type="number"
           required
           min={1950}
-          max={2035}
+          max={2040}
           defaultValue={profile?.graduation_year ?? ""}
           className="mt-1 block w-full rounded-md border border-zinc-300 px-3 py-2 text-zinc-900 shadow-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
           placeholder="2026"
