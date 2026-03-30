@@ -21,7 +21,9 @@ Next.js app for [Phase 1](../DEVELOPMENT_PLAN.md): authentication, Supabase-back
    cp .env.example .env.local
    ```
 
-   Fill in values from Supabase **Project Settings → API** (see [SUPABASE_SETUP.md](./SUPABASE_SETUP.md)).
+   Fill in values from Supabase **Project Settings → API** (see [SUPABASE_SETUP.md](./SUPABASE_SETUP.md)). Add **`OPENAI_API_KEY`** for campaign extraction (Phase 3).
+
+   **Monorepo:** you can put `OPENAI_API_KEY` in **`web/.env.local`** or in the **repo-root** `.env` (one folder above `web/`). `next.config.ts` loads the parent env for local dev. **Vercel** only sees variables you set in the Vercel project (and `web/.env*` in the deployed repo)—set `OPENAI_API_KEY` there too.
 
 3. Run database migrations in Supabase **SQL Editor** (in order):
    - `supabase/migrations/20260329000000_profiles.sql` (Phase 1)
