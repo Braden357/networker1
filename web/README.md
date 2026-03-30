@@ -1,0 +1,65 @@
+# Networker (web)
+
+Next.js app for [Phase 1](../DEVELOPMENT_PLAN.md): authentication, Supabase-backed profiles, protected dashboard, Vercel-ready deploy.
+
+## Prerequisites
+
+- Node.js 20+
+- A [Supabase](https://supabase.com) project
+
+## Setup
+
+1. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+2. Copy environment variables:
+
+   ```bash
+   cp .env.example .env.local
+   ```
+
+   Fill in values from Supabase **Project Settings → API** (see [SUPABASE_SETUP.md](./SUPABASE_SETUP.md)).
+
+3. Run database migrations in Supabase **SQL Editor** (in order):
+   - `supabase/migrations/20260329000000_profiles.sql` (Phase 1)
+   - `supabase/migrations/20260329120000_phase2_student_fields.sql` (Phase 2 — school, major, graduation year)
+
+4. Start the dev server:
+
+   ```bash
+   npm run dev
+   ```
+
+   Open [http://localhost:3000](http://localhost:3000).
+
+## Scripts
+
+| Command        | Description        |
+| -------------- | ------------------ |
+| `npm run dev`  | Development server |
+| `npm run build`| Production build   |
+| `npm run start`| Production server  |
+| `npm run lint` | ESLint             |
+
+## Deploy to Vercel
+
+1. Push this repo to GitHub (this folder can live as the repo root or as a monorepo subfolder).
+2. [Import the project](https://vercel.com/new) in Vercel.
+3. If the Next app lives in `web/`, set **Root Directory** to `web` in Vercel project settings.
+4. Add environment variables in Vercel:
+   - `NEXT_PUBLIC_SUPABASE_URL`
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+5. Add your Vercel URL(s) to Supabase **Authentication → URL Configuration → Redirect URLs** (see [SUPABASE_SETUP.md](./SUPABASE_SETUP.md)).
+
+## Security notes
+
+- The **anon** key is safe to expose in the browser; it is restricted by Row Level Security.
+- Do **not** put the **service role** key in client code or `NEXT_PUBLIC_*` variables.
+
+## Related docs
+
+- [PROJECT_SPEC_FROM_INTERVIEW.md](../PROJECT_SPEC_FROM_INTERVIEW.md)
+- [DEVELOPMENT_PLAN.md](../DEVELOPMENT_PLAN.md)

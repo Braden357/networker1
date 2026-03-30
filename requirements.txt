@@ -1,0 +1,7 @@
+playwright
+playwright-stealth
+openai
+sqlalchemy
+python-dotenv
+streamlit
+pytest

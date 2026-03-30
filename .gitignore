@@ -1,0 +1,30 @@
+# Secrets and local env (never commit)
+.env
+.env.*
+!.env.example
+!web/.env.example
+web/.env.local
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+
+# Next.js / Node (web/)
+web/node_modules/
+web/.next/
+web/out/
+web/.vercel
+
+# OS / IDE
+.DS_Store
+.idea/
+.vscode/
+
+*.log
+
+# Local databases
+*.db
