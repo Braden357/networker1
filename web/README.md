@@ -26,6 +26,7 @@ Next.js app for [Phase 1](../DEVELOPMENT_PLAN.md): authentication, Supabase-back
 3. Run database migrations in Supabase **SQL Editor** (in order):
    - `supabase/migrations/20260329000000_profiles.sql` (Phase 1)
    - `supabase/migrations/20260329120000_phase2_student_fields.sql` (Phase 2 — school, major, graduation year)
+   - `supabase/migrations/20260329203000_campaigns.sql` (Phase 3 — campaign drafts)
 
 4. Start the dev server:
 
@@ -55,6 +56,7 @@ Stored in [`.vercel/project.json`](.vercel/project.json) for `vercel` CLI. If th
 4. Add environment variables in Vercel:
    - `NEXT_PUBLIC_SUPABASE_URL`
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+   - `OPENAI_API_KEY` (server-only; for campaign extraction)
 5. Add your Vercel URL(s) to Supabase **Authentication → URL Configuration → Redirect URLs** (see [SUPABASE_SETUP.md](./SUPABASE_SETUP.md)).
 
 ## Security notes

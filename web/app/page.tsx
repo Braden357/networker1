@@ -22,12 +22,20 @@ export default async function Home() {
         </p>
         <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
           {user ? (
-            <Link
-              href="/dashboard"
-              className="inline-flex items-center justify-center rounded-md bg-zinc-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-zinc-800"
-            >
-              Go to dashboard
-            </Link>
+            <>
+              <Link
+                href="/dashboard"
+                className="inline-flex items-center justify-center rounded-md bg-zinc-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-zinc-800"
+              >
+                Dashboard
+              </Link>
+              <Link
+                href="/campaigns/new"
+                className="inline-flex items-center justify-center rounded-md border border-zinc-300 bg-white px-5 py-2.5 text-sm font-medium text-zinc-900 hover:bg-zinc-50"
+              >
+                New campaign
+              </Link>
+            </>
           ) : (
             <>
               <Link
