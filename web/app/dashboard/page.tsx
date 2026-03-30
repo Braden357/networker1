@@ -89,8 +89,8 @@ export default async function DashboardPage() {
               Campaigns
             </h2>
             <p className="mt-1 text-sm text-zinc-600">
-              Describe your goal, review the extracted checklist, and save a
-              draft (Phase 3 — no discovery run yet).
+              Draft checklist (Phase 3), then run a stub pipeline with live
+              progress (Phase 4).
             </p>
           </div>
           <Link
@@ -125,8 +125,24 @@ export default async function DashboardPage() {
                       href={`/campaigns/${c.id}/checklist`}
                       className="font-medium text-zinc-900 underline"
                     >
-                      Edit checklist
+                      Checklist
                     </Link>
+                    {c.status === "running" ? (
+                      <Link
+                        href={`/campaigns/${c.id}/run`}
+                        className="font-medium text-emerald-800 underline"
+                      >
+                        Progress
+                      </Link>
+                    ) : null}
+                    {c.status === "complete" || c.status === "failed" ? (
+                      <Link
+                        href={`/campaigns/${c.id}/run`}
+                        className="font-medium text-zinc-600 underline"
+                      >
+                        Status
+                      </Link>
+                    ) : null}
                   </div>
                 </div>
                 <p className="mt-1 text-xs text-zinc-400">

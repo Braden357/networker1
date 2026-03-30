@@ -23,12 +23,13 @@ Next.js app for [Phase 1](../DEVELOPMENT_PLAN.md): authentication, Supabase-back
 
    Fill in values from Supabase **Project Settings → API** (see [SUPABASE_SETUP.md](./SUPABASE_SETUP.md)). Add **`OPENAI_API_KEY`** for campaign extraction (Phase 3).
 
-   **Monorepo:** you can put `OPENAI_API_KEY` in **`web/.env.local`** or in the **repo-root** `.env` (one folder above `web/`). `next.config.ts` loads the parent env for local dev. **Vercel** only sees variables you set in the Vercel project (and `web/.env*` in the deployed repo)—set `OPENAI_API_KEY` there too.
+   **Monorepo:** you can put `OPENAI_API_KEY` in **`web/.env.local`** or in the **repo-root** `.env` (one folder above `web/`). `next.config.ts` loads the parent env for local dev. **Vercel** only sees variables you set in the Vercel project (and `web/.env*` in the deployed repo)—set `OPENAI_API_KEY` and **`SUPABASE_SERVICE_ROLE_KEY`** (Phase 4 background runs) there too. Never commit the service role key.
 
 3. Run database migrations in Supabase **SQL Editor** (in order):
    - `supabase/migrations/20260329000000_profiles.sql` (Phase 1)
    - `supabase/migrations/20260329120000_phase2_student_fields.sql` (Phase 2 — school, major, graduation year)
    - `supabase/migrations/20260329203000_campaigns.sql` (Phase 3 — campaign drafts)
+   - `supabase/migrations/20260329210000_campaign_run_progress.sql` (Phase 4 — run progress columns)
 
 4. Start the dev server:
 
@@ -59,6 +60,7 @@ Stored in [`.vercel/project.json`](.vercel/project.json) for `vercel` CLI. If th
    - `NEXT_PUBLIC_SUPABASE_URL`
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
    - `OPENAI_API_KEY` (server-only; for campaign extraction)
+   - `SUPABASE_SERVICE_ROLE_KEY` (server-only; for Phase 4 run pipeline updates)
 5. Add your Vercel URL(s) to Supabase **Authentication → URL Configuration → Redirect URLs** (see [SUPABASE_SETUP.md](./SUPABASE_SETUP.md)).
 
 ## Security notes
