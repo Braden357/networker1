@@ -1,5 +1,5 @@
--- Profiles: one row per auth user; optional LinkedIn URL (Phase 1 spec).
--- Run via Supabase SQL Editor or: supabase db push (CLI)
+-- Phase 1: profiles table + RLS + auto row on signup.
+-- Run this BEFORE 20260329120000_phase2_student_fields.sql
 
 create table if not exists public.profiles (
   id uuid primary key references auth.users (id) on delete cascade,
@@ -10,18 +10,21 @@ create table if not exists public.profiles (
 
 alter table public.profiles enable row level security;
 
+drop policy if exists "Users can read own profile" on public.profiles;
 create policy "Users can read own profile"
   on public.profiles
   for select
   to authenticated
   using ((select auth.uid()) = id);
 
+drop policy if exists "Users can insert own profile" on public.profiles;
 create policy "Users can insert own profile"
   on public.profiles
   for insert
   to authenticated
   with check ((select auth.uid()) = id);
 
+drop policy if exists "Users can update own profile" on public.profiles;
 create policy "Users can update own profile"
   on public.profiles
   for update
@@ -29,7 +32,6 @@ create policy "Users can update own profile"
   using ((select auth.uid()) = id)
   with check ((select auth.uid()) = id);
 
--- Auto-create profile row when a user signs up
 create or replace function public.handle_new_user()
 returns trigger
 language plpgsql
@@ -48,4 +50,4 @@ drop trigger if exists on_auth_user_created on auth.users;
 
 create trigger on_auth_user_created
   after insert on auth.users
-  for each row execute procedure public.handle_new_user();
+  for each row execute function public.handle_new_user();

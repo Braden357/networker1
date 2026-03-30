@@ -15,18 +15,21 @@ create index if not exists campaigns_user_id_created_at_idx
 
 alter table public.campaigns enable row level security;
 
+drop policy if exists "Users can read own campaigns" on public.campaigns;
 create policy "Users can read own campaigns"
   on public.campaigns
   for select
   to authenticated
   using ((select auth.uid()) = user_id);
 
+drop policy if exists "Users can insert own campaigns" on public.campaigns;
 create policy "Users can insert own campaigns"
   on public.campaigns
   for insert
   to authenticated
   with check ((select auth.uid()) = user_id);
 
+drop policy if exists "Users can update own campaigns" on public.campaigns;
 create policy "Users can update own campaigns"
   on public.campaigns
   for update
@@ -34,6 +37,7 @@ create policy "Users can update own campaigns"
   using ((select auth.uid()) = user_id)
   with check ((select auth.uid()) = user_id);
 
+drop policy if exists "Users can delete own campaigns" on public.campaigns;
 create policy "Users can delete own campaigns"
   on public.campaigns
   for delete
