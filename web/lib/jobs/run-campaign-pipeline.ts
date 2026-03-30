@@ -1,4 +1,5 @@
 import { createServiceRoleClient } from "@/lib/supabase/service";
+import { materializeCandidatesForCampaign } from "@/lib/jobs/materialize-candidates";
 
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -29,28 +30,27 @@ export async function runCampaignPipeline(campaignId: string) {
   try {
     await patch({
       run_step: "discover",
-      run_progress: 12,
+      run_progress: 8,
       run_error: null,
     });
-    await sleep(900);
-
+    await materializeCandidatesForCampaign(supabase, campaignId);
     await patch({
       run_step: "rank",
-      run_progress: 38,
+      run_progress: 35,
     });
-    await sleep(900);
+    await sleep(600);
 
     await patch({
       run_step: "research",
-      run_progress: 64,
+      run_progress: 62,
     });
-    await sleep(900);
+    await sleep(600);
 
     await patch({
       run_step: "draft",
-      run_progress: 88,
+      run_progress: 86,
     });
-    await sleep(700);
+    await sleep(500);
 
     await patch({
       run_step: "done",

@@ -30,6 +30,7 @@ Next.js app for [Phase 1](../DEVELOPMENT_PLAN.md): authentication, Supabase-back
    - `supabase/migrations/20260329120000_phase2_student_fields.sql` (Phase 2 — school, major, graduation year)
    - `supabase/migrations/20260329203000_campaigns.sql` (Phase 3 — campaign drafts)
    - `supabase/migrations/20260329210000_campaign_run_progress.sql` (Phase 4 — run progress columns)
+   - `supabase/migrations/20260329220000_candidates.sql` (Phase 5 — mock candidate list + RLS)
 
 4. Start the dev server:
 

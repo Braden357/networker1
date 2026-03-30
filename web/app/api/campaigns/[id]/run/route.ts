@@ -1,6 +1,7 @@
 import { after } from "next/server";
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { MAX_COMPLETED_RUNS_PER_WEEK } from "@/lib/discovery/constants";
 import { runCampaignPipeline } from "@/lib/jobs/run-campaign-pipeline";
 
 export async function POST(
@@ -65,6 +66,29 @@ export async function POST(
 
   if (row.status !== "draft" && row.status !== "failed") {
     return NextResponse.json({ error: "Cannot start run from this state." }, { status: 400 });
+  }
+
+  const weekAgo = new Date(
+    Date.now() - 7 * 24 * 60 * 60 * 1000,
+  ).toISOString();
+  const { count: completedThisWeek, error: countErr } = await supabase
+    .from("campaigns")
+    .select("*", { count: "exact", head: true })
+    .eq("user_id", user.id)
+    .eq("status", "complete")
+    .gte("run_completed_at", weekAgo);
+
+  if (countErr) {
+    return NextResponse.json({ error: countErr.message }, { status: 500 });
+  }
+
+  if ((completedThisWeek ?? 0) >= MAX_COMPLETED_RUNS_PER_WEEK) {
+    return NextResponse.json(
+      {
+        error: `MVP limit: at most ${MAX_COMPLETED_RUNS_PER_WEEK} completed runs per rolling 7 days. Try again later or use another account for testing.`,
+      },
+      { status: 429 },
+    );
   }
 
   const { error: updateError } = await supabase

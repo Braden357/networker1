@@ -135,7 +135,23 @@ export default async function DashboardPage() {
                         Progress
                       </Link>
                     ) : null}
-                    {c.status === "complete" || c.status === "failed" ? (
+                    {c.status === "complete" ? (
+                      <>
+                        <Link
+                          href={`/campaigns/${c.id}/candidates`}
+                          className="font-medium text-emerald-800 underline"
+                        >
+                          Results
+                        </Link>
+                        <Link
+                          href={`/campaigns/${c.id}/run`}
+                          className="font-medium text-zinc-600 underline"
+                        >
+                          Status
+                        </Link>
+                      </>
+                    ) : null}
+                    {c.status === "failed" ? (
                       <Link
                         href={`/campaigns/${c.id}/run`}
                         className="font-medium text-zinc-600 underline"

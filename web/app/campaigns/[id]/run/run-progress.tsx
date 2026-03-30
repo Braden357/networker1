@@ -96,20 +96,34 @@ export function RunProgress({ campaignId }: { campaignId: string }) {
       </div>
 
       <p className="text-xs text-zinc-500">
-        This page polls your campaign in Supabase; you can refresh or leave and
-        come back. Phase 4 uses a short stub pipeline—real discovery is Phase 5.
+        Progress is stored in Supabase. Phase 5 fills a mock candidate list during
+        the run (ranked, with source labels)—open results when the bar hits 100%.
       </p>
 
       {done ? (
-        <p className="rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-900">
-          Run complete (stub). Next: candidate list and real discovery.
-        </p>
+        <div className="space-y-3 rounded-md border border-emerald-200 bg-emerald-50 px-3 py-3 text-sm text-emerald-900">
+          <p>Run complete. Your ranked (mock) suggestions are ready.</p>
+          <Link
+            href={`/campaigns/${campaignId}/candidates`}
+            className="inline-flex rounded-md bg-emerald-900 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-800"
+          >
+            View suggested contacts
+          </Link>
+        </div>
       ) : null}
 
       <div className="flex flex-wrap gap-3 text-sm">
         <Link href={`/campaigns/${campaignId}/checklist`} className="underline">
           Checklist
         </Link>
+        {done ? (
+          <Link
+            href={`/campaigns/${campaignId}/candidates`}
+            className="underline"
+          >
+            Results
+          </Link>
+        ) : null}
         <Link href="/dashboard" className="underline">
           Dashboard
         </Link>

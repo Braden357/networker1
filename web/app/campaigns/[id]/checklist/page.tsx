@@ -89,12 +89,16 @@ export default async function CampaignChecklistPage({
 
       {campaign.status === "complete" ? (
         <p className="mt-4 rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-900">
-          Last run finished (stub).{" "}
+          Last run finished.{" "}
           <Link
-            href={`/campaigns/${campaign.id}/run`}
+            href={`/campaigns/${campaign.id}/candidates`}
             className="font-medium underline"
           >
-            View status
+            View suggested contacts
+          </Link>{" "}
+          ·{" "}
+          <Link href={`/campaigns/${campaign.id}/run`} className="underline">
+            Status
           </Link>
         </p>
       ) : null}
