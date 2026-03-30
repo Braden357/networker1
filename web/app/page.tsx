@@ -17,8 +17,8 @@ export default async function Home() {
           Student networking, planned.
         </h1>
         <p className="mt-4 text-base leading-relaxed text-zinc-600">
-          Sign in to save your profile and campaigns. Phase 1: authentication and
-          dashboard only.
+          Sign in to save your student profile and (soon) campaigns. Phase 2:
+          school, graduation year, major, and optional LinkedIn URL.
         </p>
         <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
           {user ? (

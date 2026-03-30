@@ -33,16 +33,17 @@ export async function updateProfile(
     };
   }
 
-  const { error } = await supabase
-    .from("profiles")
-    .update({
+  const { error } = await supabase.from("profiles").upsert(
+    {
+      id: user.id,
       school: parsed.data.school,
       graduation_year: parsed.data.graduation_year,
       major: parsed.data.major,
       linkedin_profile_url: parsed.data.linkedin_profile_url,
       updated_at: new Date().toISOString(),
-    })
-    .eq("id", user.id);
+    },
+    { onConflict: "id" },
+  );
 
   if (error) {
     return {
