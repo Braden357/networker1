@@ -14,9 +14,9 @@ type RunStatusPayload = {
 
 const STEP_LABEL: Record<string, string> = {
   queued: "Queued…",
-  discover: "Discovering candidates (stub)",
-  rank: "Ranking by fit (stub)",
-  research: "Research pass (stub)",
+  discover: "Discovering candidates (mock pool)",
+  rank: "Ranking by fit (heuristic)",
+  research: "Research cards + shared profile cache (LLM)",
   draft: "Drafting outreach (stub)",
   done: "Finished",
   failed: "Failed",

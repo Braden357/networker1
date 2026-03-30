@@ -1,14 +1,18 @@
 import { createServiceRoleClient } from "@/lib/supabase/service";
-import { materializeCandidatesForCampaign } from "@/lib/jobs/materialize-candidates";
+import {
+  insertCandidatesForCampaign,
+  prepareRankedCandidatesForCampaign,
+} from "@/lib/jobs/materialize-candidates";
+import { resolvePublicProfileCache } from "@/lib/jobs/resolve-public-profile-cache";
+import type { CandidateInsertRow } from "@/lib/jobs/materialize-candidates";
 
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 /**
- * Stub async pipeline: discover → rank → research → draft.
- * Phase 5 replaces discovery/ranking with real data; Phase 7 adds drafts per candidate.
- * Updates rows via service role so it can run after the HTTP response (no user cookies).
+ * Async pipeline: discover → rank → research (cache + LLM) → draft stub → done.
+ * Service role updates campaigns and writes cache/candidates after HTTP returns.
  */
 export async function runCampaignPipeline(campaignId: string) {
   const supabase = createServiceRoleClient();
@@ -33,18 +37,42 @@ export async function runCampaignPipeline(campaignId: string) {
       run_progress: 8,
       run_error: null,
     });
-    await materializeCandidatesForCampaign(supabase, campaignId);
+
+    const { ranked, extractedParameters, studentSchool } =
+      await prepareRankedCandidatesForCampaign(supabase, campaignId);
+
     await patch({
       run_step: "rank",
       run_progress: 35,
     });
-    await sleep(600);
 
     await patch({
       run_step: "research",
-      run_progress: 62,
+      run_progress: 35,
     });
-    await sleep(600);
+
+    const n = ranked.length;
+    const withCache: CandidateInsertRow[] = [];
+
+    for (let i = 0; i < n; i++) {
+      const r = ranked[i];
+      const cacheId = await resolvePublicProfileCache(
+        supabase,
+        r,
+        extractedParameters,
+        studentSchool,
+      );
+      withCache.push({ ...r, public_profile_cache_id: cacheId });
+
+      const researchProgress =
+        n > 0 ? 35 + Math.round(((i + 1) / n) * (62 - 35)) : 62;
+      await patch({
+        run_step: "research",
+        run_progress: Math.min(62, researchProgress),
+      });
+    }
+
+    await insertCandidatesForCampaign(supabase, campaignId, withCache);
 
     await patch({
       run_step: "draft",

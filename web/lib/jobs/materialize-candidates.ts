@@ -1,13 +1,29 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { MAX_CANDIDATES_PER_RUN } from "@/lib/discovery/constants";
 import { buildMockCandidateSeeds } from "@/lib/discovery/mock-seed";
-import { rankMockCandidates } from "@/lib/discovery/rank-candidates";
-import { extractedParametersSchema } from "@/lib/validations/campaign";
+import {
+  rankMockCandidates,
+  type RankedCandidateInsert,
+} from "@/lib/discovery/rank-candidates";
+import {
+  extractedParametersSchema,
+  type ExtractedParameters,
+} from "@/lib/validations/campaign";
 
-export async function materializeCandidatesForCampaign(
+export type RankedCampaignContext = {
+  ranked: RankedCandidateInsert[];
+  extractedParameters: ExtractedParameters;
+  studentSchool: string | null;
+};
+
+/**
+ * Loads campaign + profile, clears old candidates, builds ranked mock list (Phase 5–6 discover/rank).
+ * Does not insert candidates — research step resolves cache then bulk-inserts.
+ */
+export async function prepareRankedCandidatesForCampaign(
   supabase: SupabaseClient,
   campaignId: string,
-) {
+): Promise<RankedCampaignContext> {
   const { data: campaign, error: cErr } = await supabase
     .from("campaigns")
     .select("user_id, extracted_parameters")
@@ -41,7 +57,23 @@ export async function materializeCandidatesForCampaign(
     profile?.school ?? null,
   );
 
-  const rows = ranked.map((r) => ({
+  return {
+    ranked,
+    extractedParameters: parsed.data,
+    studentSchool: profile?.school ?? null,
+  };
+}
+
+export type CandidateInsertRow = RankedCandidateInsert & {
+  public_profile_cache_id: string;
+};
+
+export async function insertCandidatesForCampaign(
+  supabase: SupabaseClient,
+  campaignId: string,
+  rows: CandidateInsertRow[],
+) {
+  const payload = rows.map((r) => ({
     campaign_id: campaignId,
     rank_order: r.rank_order,
     display_name: r.display_name,
@@ -51,9 +83,10 @@ export async function materializeCandidatesForCampaign(
     alumni_score: r.alumni_score,
     alumni_note: r.alumni_note,
     fit_score: r.fit_score,
+    public_profile_cache_id: r.public_profile_cache_id,
   }));
 
-  const { error: insErr } = await supabase.from("candidates").insert(rows);
+  const { error: insErr } = await supabase.from("candidates").insert(payload);
   if (insErr) {
     throw new Error(insErr.message);
   }
